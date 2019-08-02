@@ -1,3 +1,5 @@
+import csv, io
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.forms import  AuthenticationForm
@@ -7,6 +9,9 @@ from .forms import NewUserForm
 
 from .models import Page
 
+from .Student import Stud
+
+st = Stud()
 
 def homepage(request):
     return render(request, 'main/home.html', {'students': Page.objects.all})
@@ -53,4 +58,32 @@ def login_request(request):
 
     form = AuthenticationForm()
     return render(request, "main/login.html", {'form': form})
+
+def upload(request):
+    if request.method == "POST":
+        uploaded_file = request.FILES['document']
+        unpacked_file = uploaded_file.read().decode('ANSI')
+        io_string = io.StringIO(unpacked_file)
+
+        uploaded_data = csv.reader(io_string, delimiter=';')
+
+        i = 0        
+        for row in uploaded_data:
+            print(len(row))
+            _, created = Page.objects.update_or_create(
+                page_id = row[st.id],
+                page_name = row[st.name],
+                page_birth = row[st.birth],
+
+            )
+            i += 1
+            if  i == 7: 
+                break
+        # if uploaded_file.file.name.endswith('.csv'):
+            # outData = csv.reader(uploaded_file, delimiter=';', quotechar='"')
+            # print(outData[1])
+        print(uploaded_file)
+        print(uploaded_file.size)
+    return render(request, "main/upload.html")
+
 # Create your views here.

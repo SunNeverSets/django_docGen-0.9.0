@@ -14,22 +14,62 @@
     </head>
 
     <body>
-        
-        <!-- Dropdown Structure -->
-        <ul id="dropdown1" class="dropdown-content">
-            <li><a href="/">One Link</a></li>
-            <li><a href="/register">Two link</a></li>
-            <li class="divider"></li>
-            <li><a href="/login">Three link</a></li>
-        </ul>
+        <div class="wrapper">
+            <!-- Dropdown Structure -->
+            <ul id="dropdown1" class="dropdown-content">
+                <li><a href="/upload">Upload</a></li>
+                <li><a href="/register">Two link</a></li>
+                <li class="divider"></li>
+                <li><a href="/login">Three link</a></li>
+            </ul>
 
-        
-        {% include "main/includes/navbar.html"  %}
-        {% include "main/includes/messages.html"  %}
 
+            
+            {% include "main/includes/navbar.html"  %}
+            {% include "main/includes/messages.html"  %}
+            <ul id="slide-out" class="sidenav sidenav-fixed">
+                <form method="GET" action=".">
+                    <div class="row">
+                        <form class="col">
+                            <li>
+                                <div class="input-field col s12">
+                                <i class="material-icons prefix font-size" style="font-size: 2rem;">search</i>
+                                <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+                                <label for="icon_prefix2">Name</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="input-field col s12">
+                                    <select>
+                                    <option value="" disabled selected>Choose your option</option>
+                                    <option value="1">2020</option>
+                                    <option value="2">2021</option>
+                                    <option value="3">2022</option>
+                                    </select>
+                                    <label>Chose a course</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="input-field col s12">
+                                    <select>
+                                    <option value="" disabled selected>Choose your option</option>
+                                    <option value="1">Option 1</option>
+                                    <option value="2">Option 2</option>
+                                    <option value="3">Option 3</option>
+                                    </select>
+                                    <label>A label</label>
+                                </div>
+                            </li>
+                        </form>
+                    </div>
+                </form>
+                
+            </ul> 
+            <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a> 
+        </div>
+        
+        
         <!--JavaScript at end of body for optimized loading-->
-        
-        
         
         <div class="container">
             <br>
@@ -38,10 +78,37 @@
             <br>
         </div>
         
+
+                                
+
+
+        <style type="text/css">
+        .sidenav {
+            margin-top: 65px;
+            width: 250px;
+        }
+        </style>
+        <style type="text/css">
+        .container {
+            padding-left: 50px;
+        }
+        </style>
+        >
+        
         <script src="{% static 'tinymce/js/prism.js' %}"></script>
             
         <script>
+            $(document).ready(function(){
+                $('.sidenav').sidenav();
+            });
+        </script>
+        <script>
             $(".dropdown-trigger").dropdown();
+        </script>
+        <script>
+            $(document).ready(function(){
+                $('select').formSelect();
+            });
         </script>
     </body>
   </html>
