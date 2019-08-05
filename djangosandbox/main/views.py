@@ -1,5 +1,7 @@
 import csv, io
 
+from docxtpl import DocxTemplate
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.forms import  AuthenticationForm
@@ -8,13 +10,34 @@ from django.contrib import messages
 from .forms import NewUserForm
 
 from .models import Page
-
 from .Student import Stud
 
 st = Stud()
 
+def is_valid_queryPar(param):
+    return param != '' and param is not None
+
+# def generate_docx(request):
+#     qs = Page.objects.all
+
 def homepage(request):
-    return render(request, 'main/home.html', {'students': Page.objects.all})
+    qs = Page.objects.all()
+    page_id_query = request.GET.get('unique_id')
+    print(page_id_query)
+    if is_valid_queryPar(page_id_query):
+        print("Done")
+    page_name_query = request.GET.get('text-unique')
+    page_gradYear_query = request.GET.get('select-box')
+    if is_valid_queryPar(page_name_query):
+        qs = qs.filter(page_name__icontains = page_name_query )
+    if is_valid_queryPar(page_gradYear_query):
+        qs = qs.filter(page_gradYear = page_gradYear_query)
+    context = {
+        'students': qs
+    }
+
+    print(page_name_query, page_gradYear_query)
+    return render(request, 'main/home.html', context)
 
 
 def register(request):
@@ -69,21 +92,24 @@ def upload(request):
 
         i = 0        
         for row in uploaded_data:
-            print(len(row))
-            _, created = Page.objects.update_or_create(
-                page_id = row[st.id],
-                page_name = row[st.name],
-                page_birth = row[st.birth],
-
-            )
-            i += 1
-            if  i == 7: 
-                break
+            if row[st.nationality] == st.is_foreign:
+                _, created = Page.objects.update_or_create(
+                    page_id = row[st.id],
+                    page_name = row[st.name],
+                    page_birth = row[st.birth],
+                    page_nationality = row[st.nationality],
+                    page_nameEn = row[st.en_stud_name],
+                    page_gradYear = row[st.stud_end_year],
+                    page_formOfStudy = row[st.form_of_study],
+                    page_specialty = row[st.stud_spec],
+                    page_prevDoc = row[st.stud_prev_document],
+                )
         # if uploaded_file.file.name.endswith('.csv'):
             # outData = csv.reader(uploaded_file, delimiter=';', quotechar='"')
             # print(outData[1])
         print(uploaded_file)
         print(uploaded_file.size)
     return render(request, "main/upload.html")
+
 
 # Create your views here.

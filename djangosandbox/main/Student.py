@@ -19,9 +19,10 @@ class Stud():
             '----']
         self.filename_full_time = "Supp_Info_Full_Time.xlsx"
         self.filename_part_time = "Supp_Info_Part_Time.xlsx"
-
+    
         self.endyearlist = [2019, 2020, 2021, 2020]
-        
+        self.is_foreign = 'Ні'    
+        self.is_ukrainian = 'Так'    
     def get_heading(self, locList):
         """
         Gets the heading with all the parameters

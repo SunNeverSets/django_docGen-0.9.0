@@ -1,11 +1,14 @@
 {% extends "main/header.html" %}
 
 {% block content %}
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="document">
-        <button class="btn" type="submit">Upload CSV </button>
-    </form>
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="document">
+            <button class="btn" type="submit">Upload CSV </button>
+        </form>
 
-    Please upload a standard csv file.
+        Please upload a standard csv file.
+    </div>
+    
 {% endblock %} 
