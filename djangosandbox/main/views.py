@@ -2,12 +2,12 @@ import csv, io
 
 from docxtpl import DocxTemplate
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.forms import  AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from .forms import NewUserForm
+from .forms import DocForm
 
 from .models import Page
 from .Student import Stud
@@ -103,6 +103,8 @@ def upload(request):
                     page_formOfStudy = row[st.form_of_study],
                     page_specialty = row[st.stud_spec],
                     page_prevDoc = row[st.stud_prev_document],
+                    # page_country is not available
+                    slug = row[st.id],
                 )
         # if uploaded_file.file.name.endswith('.csv'):
             # outData = csv.reader(uploaded_file, delimiter=';', quotechar='"')
@@ -111,5 +113,18 @@ def upload(request):
         print(uploaded_file.size)
     return render(request, "main/upload.html")
 
+def doc_gen(request, slug):
+    unique_post = get_object_or_404(Page, slug=slug)
+    form = DocForm(request.POST or None,
+                    instance=unique_post)
+    if form.is_valid():
+        form.save()
+        messages.info(request, "Success")
+    
+    context = {
+        'form': form
+    }
+    
+    return render(request, 'main/detail.html', context)
 
 # Create your views here.

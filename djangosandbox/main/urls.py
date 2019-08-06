@@ -9,4 +9,5 @@ urlpatterns = [
     path("logout/", views.logout_request, name="logout"),
     path("login/", views.login_request, name="login"),
     path("upload/", views.upload, name="upload"),
+    path("<slug>/", views.doc_gen, name="detail" ),
 ]

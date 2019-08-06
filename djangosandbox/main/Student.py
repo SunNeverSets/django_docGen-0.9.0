@@ -7,6 +7,7 @@ class Stud():
         self.id = 1
         self.name = 5
         self.birth = 6
+        self.gender = 12
         self.nationality = 13
         self.en_stud_name = 14
         self.stud_end_year = 16
@@ -23,6 +24,8 @@ class Stud():
         self.endyearlist = [2019, 2020, 2021, 2020]
         self.is_foreign = 'Ні'    
         self.is_ukrainian = 'Так'    
+        self.female = 'Жіноча'
+        self.male = 'Чоловіча'
     def get_heading(self, locList):
         """
         Gets the heading with all the parameters

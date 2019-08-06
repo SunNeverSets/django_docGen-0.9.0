@@ -14,11 +14,7 @@ class Page(models.Model):
     page_formOfStudy = models.CharField(max_length=200)
     page_specialty = models.CharField(max_length=200)
     page_prevDoc = models.CharField(max_length=200)
-
-
-
-
-    page_published = models.DateTimeField("date published", default=datetime.now())
-
+    page_country = models.CharField(max_length=200, default='---')
+    slug = models.SlugField()
     def __str__(self):
         return self.page_name
