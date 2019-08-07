@@ -7,12 +7,16 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import  AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from django.urls import reverse
+from django.conf import settings
 from .forms import DocForm
 
 from .models import Page
 from .Student import Stud
 
 st = Stud()
+
+
 
 def is_valid_queryPar(param):
     return param != '' and param is not None
@@ -119,7 +123,11 @@ def doc_gen(request, slug):
                     instance=unique_post)
     if form.is_valid():
         form.save()
-        messages.info(request, "Success")
+        htp = request.build_absolute_uri().split('/')[0]
+        domain = request.build_absolute_uri().split('/')[2]
+        url = htp + '//' + domain
+        messages.info(request, url)
+        return redirect(url + '/static/Template.docx')
     
     context = {
         'form': form

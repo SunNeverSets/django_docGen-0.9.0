@@ -15,20 +15,20 @@
                             </div>
                         </li>
                         <li>
-                            <div class="input-field col s12">
+                            <div class="input-field col s12 ">
                                 <select name="select-box">
-                                <option value="" disabled selected>Choose your option</option>
-                                <option value="2020">2020</option>
-                                <option value="2021">2021</option>
-                                <option value="2022">2022</option>
+                                    <option value="2020" selected>2020</option>
+                                    <option value="2021" class="blue-text">2020</option>
+                                    <option value="2022">2021</option>
+                                    <option value="2023">2022</option>
                                 </select>
-                                <label>Graduation Year</label>
+                                <label class="blue-text">Graduation Year</label>
                             </div>
                         </li>
                     
                         <li>
                             <div class="input-field col center-align s12">
-                                <button type="submit" class="btn">Search</button> 
+                                <button type="submit" class="btn blue">Search</button> 
                         </li>
                     </form>
                 </div>
@@ -43,60 +43,25 @@
         width: 250px;
     }
     </style>
-    <form action="." method="GET">
-        <div class="container">
-            <div class="row">
-                {% for stud in students %}
-                    <div class="col s12 m6 l4">
-                        <div class="card grey lighten-1">
-                            <div class="card-content large white-text">
-                                <span class="card-title" style="font-size: 1rem">{{ stud.page_name }}</span>
-                                <p style="font-size:70%">{{ stud.page_id }}</p>
-                                <p style="font-size:70%">{{ stud.page_birth }}</p>
-                                <textarea name="unique_id" id="card_textarea" class="materialize-textarea" value="{{ stud.page_id }}" >{{ stud.page_id }}</textarea>
-                                <p>
-                                    <label>
-                                        <input name="group1" type="radio" value="eng"/>
-                                        <span>Eng</span>
-                                    </label>
-                                </p>
-                                <p>
-                                    <label>
-                                        <input name="group1" type="radio" value="ukr"/>
-                                        <span>Ukr</span>
-                                    </label>
-                                </p>
-                                <p>
-                                    <label>
-                                        <input name="group1" type="radio"  value="fra"/>
-                                        <span>Fra</span>
-                                    </label>
-                                </p>
-                                <p>
-                                    <label>
-                                        <input name="group1" type="radio"  value="rus"/>
-                                        <span>Rus</span>
-                                    </label>
-                                </p>
-                                <div class="input-field col s12">
-                                    <select>
-                                        <option value="" disabled selected>Choose your option</option>
-                                        <option value="Morocco">Morocco</option>
-                                        <option value="Turkey">Turkey</option>
-                                        <option value="Egypt">Egypt</option>
-                                    </select>
-                                    <label>Select Country</label>
-                                </div>
-                            </div>
-                            <div class="card-action">
-                                <button type="submit" class="btn">Make</button>
-                            </div>
+    <div class="container">
+        <div class="row">
+            {% for stud in students %}
+                <div class="col s12 m6 l4">
+                    <div class="card">
+                        <div class="card-content large indigo lighten-2 white-text">
+                            <span class="card-title" style="font-size: 1rem">{{ stud.page_name }}</span>
+                            <p style="font-size:70%">{{ stud.page_id }}</p>
+                            <p style="font-size:70%">{{ stud.page_birth }}</p>
                         </div>
+                        <a href="create/{{ stud.page_id }}" class="waves-effect waves-block">
+                            <div class="card-action waves-block ali">
+                                Make document
+                            </div>
+                        </a>
                     </div>
-                {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
         </div>
-    </form>
-    
+    </div>
     
 {% endblock %} 
