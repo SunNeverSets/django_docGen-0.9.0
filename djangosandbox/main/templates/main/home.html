@@ -10,22 +10,40 @@
                     <form class="col">
                         <li>
                             <div class="input-field col s12">
-                            <textarea id="icon_prefix2" class="materialize-textarea" name="text-unique"></textarea>
+                           <textarea id="icon_prefix2" class="materialize-textarea" name="text-unique"></textarea>
                             <label for="icon_prefix2">Name</label>
                             </div>
                         </li>
                         <li>
                             <div class="input-field col s12 ">
-                                <select name="select-box">
+                                <select name="select-box1">
                                     <option value="2020" selected>2020</option>
-                                    <option value="2021" class="blue-text">2020</option>
+                                    <option value="2021">2020</option>
                                     <option value="2022">2021</option>
                                     <option value="2023">2022</option>
                                 </select>
                                 <label class="blue-text">Graduation Year</label>
                             </div>
                         </li>
-                    
+                        <li>
+                            <div class="input-field col s12" >
+                                <select name="select-box2">
+                                {% for fac in faculties %}
+                                    <option value="{{ fac }}" {% if loop.first %} selected {% endif %} align >{{ fac }}</option>
+                                {% endfor %}
+                                </select>
+                                <label class="blue-text">Faculty</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="input-field col s12 ">
+                                <select name="select-box3">
+                                    <option value="Бакалавр" selected>Bachelor</option>
+                                    <option value="Магістр">Master</option>
+                                </select>
+                                <label class="blue-text">Education Level</label>
+                            </div>
+                        </li>
                         <li>
                             <div class="input-field col center-align s12">
                                 <button type="submit" class="btn blue">Search</button> 
@@ -49,9 +67,10 @@
                 <div class="col s12 m6 l4">
                     <div class="card">
                         <div class="card-content large indigo lighten-2 white-text">
-                            <span class="card-title" style="font-size: 1rem">{{ stud.page_name }}</span>
-                            <p style="font-size:70%">{{ stud.page_id }}</p>
-                            <p style="font-size:70%">{{ stud.page_birth }}</p>
+                            <span class="card-title" style="font-size: 1.2rem">{{ stud.page_name }}</span>
+                            <p style="font-size: 0.9rem">{{ stud.page_birth }}</p>
+                            <p style="font-size: 0.9rem">{{ stud.page_specialty }}</p>
+                            <p style="font-size: 0.9rem">{{ stud.page_eduLevel }}</p>
                         </div>
                         <a href="create/{{ stud.page_id }}" class="waves-effect waves-block">
                             <div class="card-action waves-block ali">

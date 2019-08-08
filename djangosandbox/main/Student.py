@@ -11,8 +11,12 @@ class Stud():
         self.nationality = 13
         self.en_stud_name = 14
         self.stud_end_year = 16
+        self.finish_study = 18
+        self.faculty = 19
+        self.edu_level = 20
         self.form_of_study = 22
         self.stud_spec = 26
+        self.edu_prog = 28
         self.stud_prev_document = 42
         self.ver_heading = ['blank','Diploma_id', 'Supp_id', 'Ukr_Name', 
             'Ukr_Surname', 'End_Name', 'End_Surname', 'BirthDate', 'Proj_Ukr', 
