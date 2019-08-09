@@ -1,6 +1,7 @@
 import csv
 import io
 import os
+import glob
 
 from docxtpl import DocxTemplate
 
@@ -37,7 +38,6 @@ def homepage(request):
     page_gradYear_query = request.GET.get('select-box1')
     page_faculty_query = request.GET.get('select-box2')
     page_eduLevel_query = request.GET.get('select-box3')
-    print(page_faculty_query + ' here ')
     if is_valid_queryPar(page_name_query):
         qs = qs.filter(page_name__icontains=page_name_query)
     if is_valid_queryPar(page_gradYear_query):
@@ -45,7 +45,10 @@ def homepage(request):
     if is_valid_queryPar(page_faculty_query):
         qs = qs.filter(page_faculty=page_faculty_query)
     if is_valid_queryPar(page_eduLevel_query):
-        qs = qs.filter(page_eduLevel=page_eduLevel_query)
+        if page_eduLevel_query == 'bh':
+            qs = qs.filter(page_eduLevel= st.bh)
+        elif page_eduLevel_query == 'ma':
+            qs = qs.filter(page_eduLevel= st.ma)
     context = {
         'students': qs,
         'faculties': facultiesList
@@ -142,25 +145,38 @@ def doc_gen(request, slug):
                    instance=unique_post)
     if form.is_valid():
         form.save()
+        doc_type_list = [
+                'en_template.docx', 
+                'uk_template.docx', 
+                'fr_template.docx', 
+                'ru_template.docx'
+                ]
+        # Delete all prev unneeded files
+        file_list = glob.glob(settings.BASE_DIR + '\\main\\static\\*.docx')
+        print(file_list)
+        for file in file_list:
+            # print(os.path.basename(file)[:2])
+            if os.path.basename(file) not in doc_type_list:
+                os.remove(file)
+
         # Get basic domain name
         dn = get_basic_DN(request)
         # document creation
 
         if form.cleaned_data['doc_type'] == 'en':
-            doc_path = settings.BASE_DIR + '\main\static\en_template.docx'
+            doc_path = settings.BASE_DIR + '\\main\\static\\en_template.docx'
         elif form.cleaned_data['doc_type'] == 'uk':
-            doc_path = settings.BASE_DIR + '\main\static\en_template.docx'
+            doc_path = settings.BASE_DIR + '\\main\\static\\uk_template.docx'
 
         doc = DocxTemplate(doc_path)
-
+        
         current_docPath = create_doc(form, doc)
         doc.save(current_docPath)
 
         messages.info(request, "Success")
-        print(form.cleaned_data['doc_type'])
-        return redirect(dn + f"/static/{form.cleaned_data['page_nameEn']}.docx")
+        #  redirect(dn + f"/static/{form.cleaned_data['page_nameEn']}.docx")
 
-        os.remove(current_docPath)
+        # os.remove(current_docPath)
 
     context = {
         'form': form
@@ -181,6 +197,10 @@ def create_doc(form, doc):
     if form.cleaned_data['rector'] == 'dn':
         rc_type = 'First vice-rectot'
         rc_name = 'D.Chernyshev'
+    elif form.cleaned_data['rector'] == 'kh':
+        rc_type = 'Vice-rector'
+        rc_name = 'O.Khomenko'
+    if form.cleaned_data['page_eduLevel'] == ''
     doc_context = {
         'country': form.cleaned_data['country'],
         'name': form.cleaned_data['page_nameEn'],

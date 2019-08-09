@@ -30,6 +30,8 @@ class Stud():
         self.is_ukrainian = 'Так'    
         self.female = 'Жіноча'
         self.male = 'Чоловіча'
+        self.bh = 'Бакалавр'
+        self.ma = 'Магістр'
     def get_heading(self, locList):
         """
         Gets the heading with all the parameters

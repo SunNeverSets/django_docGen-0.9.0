@@ -2,9 +2,9 @@
 
 {% block content %}
     <div class="container">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" class='input-field'>
             {% csrf_token %}
-            <input type="file" name="document">
+            <input type="file" name="document" class='file-path validate'>
             <button class="btn" type="submit">Upload CSV </button>
         </form>
 
