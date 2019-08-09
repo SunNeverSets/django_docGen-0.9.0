@@ -28,10 +28,24 @@ class Stud():
         self.endyearlist = [2019, 2020, 2021, 2020]
         self.is_foreign = 'Ні'    
         self.is_ukrainian = 'Так'    
+
         self.female = 'Жіноча'
         self.male = 'Чоловіча'
+
         self.bh = 'Бакалавр'
         self.ma = 'Магістр'
+
+        self.fac_arch = 'Архітектурний'
+        self.fac_const = 'Будівельний'
+        self.fac_auto = 'Автоматизації та інформаційних технологій'
+        self.fac_geo = 'Геоінформаційних систем і управління територіями'
+        self.fac_budTech = 'Будівельно-технологічний'
+        self.fac_ingSyst = 'Інженерних систем та екології'
+        self.fac_urban = 'Урбаністики та просторового планування'
+
+        self.formOfSt_full = 'Денна'
+        self.formOfSt_part = 'Заочна'
+        self.formOfSt_evening = 'Вечірня'
     def get_heading(self, locList):
         """
         Gets the heading with all the parameters

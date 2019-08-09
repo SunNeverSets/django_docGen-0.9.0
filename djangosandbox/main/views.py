@@ -2,6 +2,7 @@ import csv
 import io
 import os
 import glob
+import time
 
 from docxtpl import DocxTemplate
 
@@ -49,6 +50,7 @@ def homepage(request):
             qs = qs.filter(page_eduLevel= st.bh)
         elif page_eduLevel_query == 'ma':
             qs = qs.filter(page_eduLevel= st.ma)
+    print(facultiesList)
     context = {
         'students': qs,
         'faculties': facultiesList
@@ -194,23 +196,86 @@ def get_basic_DN(request):
 
 def create_doc(form, doc):
 
-    if form.cleaned_data['rector'] == 'dn':
-        rc_type = 'First vice-rectot'
-        rc_name = 'D.Chernyshev'
-    elif form.cleaned_data['rector'] == 'kh':
-        rc_type = 'Vice-rector'
-        rc_name = 'O.Khomenko'
-    if form.cleaned_data['page_eduLevel'] == ''
+    # if document is English
+    if form.cleaned_data['doc_type'] == 'en':
+        if form.cleaned_data['rector'] == 'dn':
+            rc_type = 'First vice-rectot'
+            rc_name = 'D.Chernyshev'
+        elif form.cleaned_data['rector'] == 'kh':
+            rc_type = 'Vice-rector'
+            rc_name = 'O.Khomenko'
+
+        if form.cleaned_data['page_eduLevel'] == st.bh:
+            eduLevel = 'Bachelor'
+            if form.cleaned_data['page_gradYear'] == '2020':
+                course = 'fourth'
+            elif form.cleaned_data['page_gradYear'] == '2021':
+                course = 'third'
+            elif form.cleaned_data['page_gradYear'] == '2022':
+                course = 'second'
+            elif form.cleaned_data['page_gradYear'] == '2023':
+                course = 'first'
+        elif form.cleaned_data['page_eduLevel'] == st.ma:
+            eduLevel = 'Master'
+            if form.cleaned_data['page_gradYear'] == '2020':
+                course = 'first' 
+            elif form.cleaned_data['page_gradYear'] == '2021':
+                course = 'second' 
+
+        if form.cleaned_data['page_gender'] == st.female:
+            gender_1 = 'Her'
+        elif form.cleaned_data['page_gender'] == st.male:
+            gender_1 = 'His'
+        
+        if form.cleaned_data['page_faculty'] == st.fac_arch:
+            faculty = 'architecture'
+        elif form.cleaned_data['page_faculty'] == st.fac_const:
+            faculty = 'construction'
+        elif form.cleaned_data['page_faculty'] == st.fac_auto:
+            faculty = 'automation and information technologies'
+        elif form.cleaned_data['page_faculty'] == st.fac_geo:
+            faculty = 'geoinforamtion systems and territorial management'
+        elif form.cleaned_data['page_faculty'] == st.fac_budTech:
+            faculty = 'tecnologico-construction'
+        elif form.cleaned_data['page_faculty'] == st.fac_ingSyst:
+            faculty = 'Engineering systems and ecology'
+        elif form.cleaned_data['page_faculty'] == st.fac_urban:
+            faculty = 'Urbanistins and environmental planning'
+
+        if form.cleaned_data['page_formOfStudy'] == st.formOfSt_full:
+            formOfStudy = 'full-time'
+        elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_part:
+            formOfStudy = 'part-time'
+            # add bh and master course correction 
+        elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_evening:
+            formOfStudy = 'Вечірня????-_- к такому меня жизнь не готовила'
+       
+        time_string = form.cleaned_data['page_studFinish']
+        grad_time = time.strptime(time_string, "%d.%m.%Y")
+        if grad_time.tm_mon == 6:
+            finish_time = f"June, {grad_time.tm_year}"
+        elif grad_time.tm_mon == 2:
+            finish_time = f"Feb, {grad_time.tm_year}"
+
+        if form.cleaned_data['page_specialty'][:3] == '191':
+            specialty = "191 \"Architecture and Urban Development\""
+        elif form.cleaned_data['page_specialty'][:3] == '192':
+            specialty = '192 \"Construction and Civil Engineering\"'
+
+        # if form.cleaned_data['page_gradYear'] == 
+
+        print(TypeError(form.cleaned_data['page_gradYear']))
+
     doc_context = {
         'country': form.cleaned_data['country'],
         'name': form.cleaned_data['page_nameEn'],
-        'grade': form.cleaned_data['page_gradYear'],
-        'study_form': form.cleaned_data['page_formOfStudy'],
-        'faculty': form.cleaned_data['page_faculty'],
-        'gender': form.cleaned_data['page_gender'],
-        'specialty': form.cleaned_data['page_specialty'],
-        'education_degree': form.cleaned_data['page_eduLevel'],
-        'grad_year': form.cleaned_data['page_studFinish'],
+        'grade': course,
+        'study_form': formOfStudy,
+        'faculty': faculty,
+        'gender': gender_1,
+        'specialty': specialty,
+        'education_degree': eduLevel,     
+        'grad_year': finish_time,
         'rector_type': rc_type,
         'rector_name': rc_name,
     }
