@@ -152,7 +152,7 @@ def doc_gen(request, slug):
                 'ru_template.docx'
                 ]
         # Delete all prev unneeded files
-        file_list = glob.glob(settings.BASE_DIR + '\\main\\static\\*.docx')
+        file_list = glob.glob(settings.BASE_DIR + '\\static\\*.docx')
         for file in file_list:
             # print(os.path.basename(file)[:2])
             if os.path.basename(file) not in doc_type_list:
@@ -204,7 +204,7 @@ def create_doc(form):
 
 
 def create_docEnglish(form):
-    doc_path = settings.BASE_DIR + '\\main\\static\\en_template.docx'
+    doc_path = settings.BASE_DIR + '\\static\\en_template.docx'
     doc = DocxTemplate(doc_path)
 
     if form.cleaned_data['rector'] == 'dn':
@@ -305,12 +305,12 @@ def create_docEnglish(form):
     }
 
     doc.render(doc_context)
-    doc.save(settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_nameEn']}.docx")
+    doc.save(settings.BASE_DIR + f"\static\{form.cleaned_data['page_nameEn']}.docx")
 
-    return (settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_nameEn']}.docx")
+    return (settings.BASE_DIR + f"\static\{form.cleaned_data['page_nameEn']}.docx")
 
 def create_docUkrainian(form):
-    doc_path = settings.BASE_DIR + '\\main\\static\\uk_template.docx'
+    doc_path = settings.BASE_DIR + '\\static\\uk_template.docx'
     doc = DocxTemplate(doc_path)
 
     if form.cleaned_data['rector'] == 'dn':
