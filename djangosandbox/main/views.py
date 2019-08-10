@@ -168,7 +168,7 @@ def doc_gen(request, slug):
         currentPage_docPath = create_doc(form)
         
 
-        messages.info(request, "Ducument created")
+        messages.info(request, "Success")
         #  redirect(dn + f"/static/{form.cleaned_data['page_nameEn']}.docx")
 
         # os.remove(current_docPath)
@@ -321,7 +321,7 @@ def create_docUkrainian(form):
         rc_name = 'Хоменко А.А.'
 
     if form.cleaned_data['page_eduLevel'] == st.bh:
-        eduLevel = '\"Бакалавр\"'
+        eduLevel = '\"Ьакалавр\"'
         if form.cleaned_data['page_gradYear'] == '2020':
             course = 'четвертого'
         elif form.cleaned_data['page_gradYear'] == '2021':
@@ -386,7 +386,7 @@ def create_docUkrainian(form):
     # if form.cleaned_data['page_gradYear'] == 
 
     
-    nameEn_parced = form.cleaned_data['page_name'].split(' ')
+    nameEn_parced = form.cleaned_data['page_nameEn'].split(' ')
     nameEn = ''
     for word in nameEn_parced:
         if word != '-':
@@ -394,9 +394,9 @@ def create_docUkrainian(form):
 
 
     if form.cleaned_data['country'] == 'mr':
-        country = 'Королівства Марокко'
+        country = 'Morocco'
     elif form.cleaned_data['country'] == 'tr':
-        country = 'Турецької Республіки'
+        country = 'Turkey'
 
     doc_context = {
         'country': country,
@@ -414,9 +414,9 @@ def create_docUkrainian(form):
     }
 
     doc.render(doc_context)
-    doc.save(settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_name']}.docx")
+    doc.save(settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_nameEn']}.docx")
 
-    return (settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_name']}.docx")
+    return (settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_nameEn']}.docx")
 
     # Create your views here.
 
