@@ -5,20 +5,10 @@
         <form method="POST" action=".">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" name="submit" >
+            <input type="submit" name="submit" class="btn" >
             <!-- <button data-target="modal1" class="btn waves-effect modal-trigger">Document</button> -->
         </form>
 
-        <!-- Modal Structure -->
-        <div id="modal1" class="modal">
-            <div class="modal-content">
-                <h4>Modal Header</h4>
-                <p>A bunch of text</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-            </div>
-        </div>
-            </div>
+        
     
 {% endblock %} 

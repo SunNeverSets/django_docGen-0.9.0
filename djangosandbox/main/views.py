@@ -22,8 +22,7 @@ from .Student import Stud
 st = Stud()
 
 
-def is_valid_queryPar(param):
-    return param != '' and param is not None
+
 
 # def generate_docx(request):
 #     qs = Page.objects.all
@@ -50,7 +49,6 @@ def homepage(request):
             qs = qs.filter(page_eduLevel= st.bh)
         elif page_eduLevel_query == 'ma':
             qs = qs.filter(page_eduLevel= st.ma)
-    print(facultiesList)
     context = {
         'students': qs,
         'faculties': facultiesList
@@ -155,27 +153,22 @@ def doc_gen(request, slug):
                 ]
         # Delete all prev unneeded files
         file_list = glob.glob(settings.BASE_DIR + '\\main\\static\\*.docx')
-        print(file_list)
         for file in file_list:
             # print(os.path.basename(file)[:2])
             if os.path.basename(file) not in doc_type_list:
                 os.remove(file)
+                
 
         # Get basic domain name
         dn = get_basic_DN(request)
         # document creation
 
-        if form.cleaned_data['doc_type'] == 'en':
-            doc_path = settings.BASE_DIR + '\\main\\static\\en_template.docx'
-        elif form.cleaned_data['doc_type'] == 'uk':
-            doc_path = settings.BASE_DIR + '\\main\\static\\uk_template.docx'
-
-        doc = DocxTemplate(doc_path)
         
-        current_docPath = create_doc(form, doc)
-        doc.save(current_docPath)
+        
+        currentPage_docPath = create_doc(form)
+        
 
-        messages.info(request, "Success")
+        messages.info(request, "Ducument created")
         #  redirect(dn + f"/static/{form.cleaned_data['page_nameEn']}.docx")
 
         # os.remove(current_docPath)
@@ -187,6 +180,14 @@ def doc_gen(request, slug):
     return render(request, 'main/detail.html', context)
 
 
+'''
+        HANDY FUNCTIONS
+'''
+
+
+def is_valid_queryPar(param):
+    return param != '' and param is not None
+
 def get_basic_DN(request):
     htp = request.build_absolute_uri().split('/')[0]
     domain = request.build_absolute_uri().split('/')[2]
@@ -194,81 +195,104 @@ def get_basic_DN(request):
     return url
 
 
-def create_doc(form, doc):
-
-    # if document is English
+def create_doc(form):
     if form.cleaned_data['doc_type'] == 'en':
-        if form.cleaned_data['rector'] == 'dn':
-            rc_type = 'First vice-rectot'
-            rc_name = 'D.Chernyshev'
-        elif form.cleaned_data['rector'] == 'kh':
-            rc_type = 'Vice-rector'
-            rc_name = 'O.Khomenko'
+        return create_docEnglish(form)
+    elif form.cleaned_data['doc_type'] == 'uk':
+        return create_docUkrainian(form)
+    # if document is English
 
-        if form.cleaned_data['page_eduLevel'] == st.bh:
-            eduLevel = 'Bachelor'
-            if form.cleaned_data['page_gradYear'] == '2020':
-                course = 'fourth'
-            elif form.cleaned_data['page_gradYear'] == '2021':
-                course = 'third'
-            elif form.cleaned_data['page_gradYear'] == '2022':
-                course = 'second'
-            elif form.cleaned_data['page_gradYear'] == '2023':
-                course = 'first'
-        elif form.cleaned_data['page_eduLevel'] == st.ma:
-            eduLevel = 'Master'
-            if form.cleaned_data['page_gradYear'] == '2020':
-                course = 'first' 
-            elif form.cleaned_data['page_gradYear'] == '2021':
-                course = 'second' 
 
-        if form.cleaned_data['page_gender'] == st.female:
-            gender_1 = 'Her'
-        elif form.cleaned_data['page_gender'] == st.male:
-            gender_1 = 'His'
-        
-        if form.cleaned_data['page_faculty'] == st.fac_arch:
-            faculty = 'architecture'
-        elif form.cleaned_data['page_faculty'] == st.fac_const:
-            faculty = 'construction'
-        elif form.cleaned_data['page_faculty'] == st.fac_auto:
-            faculty = 'automation and information technologies'
-        elif form.cleaned_data['page_faculty'] == st.fac_geo:
-            faculty = 'geoinforamtion systems and territorial management'
-        elif form.cleaned_data['page_faculty'] == st.fac_budTech:
-            faculty = 'tecnologico-construction'
-        elif form.cleaned_data['page_faculty'] == st.fac_ingSyst:
-            faculty = 'Engineering systems and ecology'
-        elif form.cleaned_data['page_faculty'] == st.fac_urban:
-            faculty = 'Urbanistins and environmental planning'
+def create_docEnglish(form):
+    doc_path = settings.BASE_DIR + '\\main\\static\\en_template.docx'
+    doc = DocxTemplate(doc_path)
 
-        if form.cleaned_data['page_formOfStudy'] == st.formOfSt_full:
-            formOfStudy = 'full-time'
-        elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_part:
-            formOfStudy = 'part-time'
-            # add bh and master course correction 
-        elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_evening:
-            formOfStudy = 'Вечірня????-_- к такому меня жизнь не готовила'
-       
-        time_string = form.cleaned_data['page_studFinish']
-        grad_time = time.strptime(time_string, "%d.%m.%Y")
-        if grad_time.tm_mon == 6:
-            finish_time = f"June, {grad_time.tm_year}"
-        elif grad_time.tm_mon == 2:
-            finish_time = f"Feb, {grad_time.tm_year}"
+    if form.cleaned_data['rector'] == 'dn':
+        rc_type = 'First vice-rectot'
+        rc_name = 'D.Chernyshev'
+    elif form.cleaned_data['rector'] == 'kh':
+        rc_type = 'Vice-rector'
+        rc_name = 'O.Khomenko'
 
-        if form.cleaned_data['page_specialty'][:3] == '191':
-            specialty = "191 \"Architecture and Urban Development\""
-        elif form.cleaned_data['page_specialty'][:3] == '192':
-            specialty = '192 \"Construction and Civil Engineering\"'
+    if form.cleaned_data['page_eduLevel'] == st.bh:
+        eduLevel = 'Bachelor'
+        if form.cleaned_data['page_gradYear'] == '2020':
+            course = 'fourth'
+        elif form.cleaned_data['page_gradYear'] == '2021':
+            course = 'third'
+        elif form.cleaned_data['page_gradYear'] == '2022':
+            course = 'second'
+        elif form.cleaned_data['page_gradYear'] == '2023':
+            course = 'first'
+    elif form.cleaned_data['page_eduLevel'] == st.ma:
+        eduLevel = 'Master'
+        if form.cleaned_data['page_gradYear'] == '2020':
+            course = 'first' 
+        elif form.cleaned_data['page_gradYear'] == '2021':
+            course = 'second' 
 
-        # if form.cleaned_data['page_gradYear'] == 
+    if form.cleaned_data['page_gender'] == st.female:
+        gender_1 = 'Her'
+    elif form.cleaned_data['page_gender'] == st.male:
+        gender_1 = 'His'
+    
+    if form.cleaned_data['page_faculty'] == st.fac_arch:
+        faculty = 'architecture'
+    elif form.cleaned_data['page_faculty'] == st.fac_const:
+        faculty = 'construction'
+    elif form.cleaned_data['page_faculty'] == st.fac_auto:
+        faculty = 'automation and information technologies'
+    elif form.cleaned_data['page_faculty'] == st.fac_geo:
+        faculty = 'geoinforamtion systems and territorial management'
+    elif form.cleaned_data['page_faculty'] == st.fac_budTech:
+        faculty = 'tecnologico-construction'
+    elif form.cleaned_data['page_faculty'] == st.fac_ingSyst:
+        faculty = 'Engineering systems and ecology'
+    elif form.cleaned_data['page_faculty'] == st.fac_urban:
+        faculty = 'Urbanistins and environmental planning'
 
-        print(TypeError(form.cleaned_data['page_gradYear']))
+    if form.cleaned_data['page_formOfStudy'] == st.formOfSt_full:
+        formOfStudy = 'full-time'
+    elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_part:
+        formOfStudy = 'part-time'
+        # add bh and master course correction 
+    elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_evening:
+        formOfStudy = 'Вечірня????-_- к такому меня жизнь не готовила'
+    
+    time_string = form.cleaned_data['page_studFinish']
+    grad_time = time.strptime(time_string, "%d.%m.%Y")
+    if grad_time.tm_mon == 6:
+        finish_time = f"June, {grad_time.tm_year}"
+    elif grad_time.tm_mon == 2:
+        finish_time = f"Feb, {grad_time.tm_year}"
+    elif grad_time.tm_mon == 12:
+        finish_time = f"Dec, {grad_time.tm_year}"
+
+    if form.cleaned_data['page_specialty'][:3] == '191':
+        specialty = "191 \"Architecture and Urban Development\""
+    elif form.cleaned_data['page_specialty'][:3] == '192':
+        specialty = '192 \"Construction and Civil Engineering\"'
+    elif form.cleaned_data['page_specialty'][:3] == '073':
+        specialty = '073 \"Management\"'
+
+    # if form.cleaned_data['page_gradYear'] == 
+
+    
+    nameEn_parced = form.cleaned_data['page_nameEn'].split(' ')
+    nameEn = ''
+    for word in nameEn_parced:
+        if word != '-':
+            nameEn += word + ' '
+
+
+    if form.cleaned_data['country'] == 'mr':
+        country = 'Morocco'
+    elif form.cleaned_data['country'] == 'tr':
+        country = 'Turkey'
 
     doc_context = {
-        'country': form.cleaned_data['country'],
-        'name': form.cleaned_data['page_nameEn'],
+        'country': country,
+        'name': nameEn,
         'grade': course,
         'study_form': formOfStudy,
         'faculty': faculty,
@@ -279,8 +303,120 @@ def create_doc(form, doc):
         'rector_type': rc_type,
         'rector_name': rc_name,
     }
+
     doc.render(doc_context)
+    doc.save(settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_nameEn']}.docx")
+
     return (settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_nameEn']}.docx")
 
+def create_docUkrainian(form):
+    doc_path = settings.BASE_DIR + '\\main\\static\\uk_template.docx'
+    doc = DocxTemplate(doc_path)
 
-# Create your views here.
+    if form.cleaned_data['rector'] == 'dn':
+        rc_type = 'Перший  проректор'
+        rc_name = 'Чернишов Д.О.'
+    elif form.cleaned_data['rector'] == 'kh':
+        rc_type = 'Проректор'
+        rc_name = 'Хоменко А.А.'
+
+    if form.cleaned_data['page_eduLevel'] == st.bh:
+        eduLevel = '\"Бакалавр\"'
+        if form.cleaned_data['page_gradYear'] == '2020':
+            course = 'четвертого'
+        elif form.cleaned_data['page_gradYear'] == '2021':
+            course = 'третього'
+        elif form.cleaned_data['page_gradYear'] == '2022':
+            course = 'другого'
+        elif form.cleaned_data['page_gradYear'] == '2023':
+            course = 'першого'
+    elif form.cleaned_data['page_eduLevel'] == st.ma:
+        eduLevel = '\"Магіст\"'
+        if form.cleaned_data['page_gradYear'] == '2020':
+            course = 'першого' 
+        elif form.cleaned_data['page_gradYear'] == '2021':
+            course = 'другого' 
+
+    if form.cleaned_data['page_gender'] == st.female:
+        gender_1 = 'грамадянинці'
+        gender_2 = 'вона'
+    elif form.cleaned_data['page_gender'] == st.male:
+        gender_1 = 'громадянину'
+        gender_2 = 'він'
+    
+    if form.cleaned_data['page_faculty'] == st.fac_arch:
+        faculty = 'архітектурного'
+    elif form.cleaned_data['page_faculty'] == st.fac_const:
+        faculty = 'будівельного'
+    elif form.cleaned_data['page_faculty'] == st.fac_auto:
+        faculty = 'автоматизації та інформаційних технологій'
+    elif form.cleaned_data['page_faculty'] == st.fac_geo:
+        faculty = 'Геоінформаційних систем і управління територіями'
+    elif form.cleaned_data['page_faculty'] == st.fac_budTech:
+        faculty = 'Будівельно-технологічний'
+    elif form.cleaned_data['page_faculty'] == st.fac_ingSyst:
+        faculty = 'Інженерних систем та екології'
+    elif form.cleaned_data['page_faculty'] == st.fac_urban:
+        faculty = 'Урбаністики та просторового планування'
+
+    if form.cleaned_data['page_formOfStudy'] == st.formOfSt_full:
+        formOfStudy = 'денної'
+    elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_part:
+        formOfStudy = 'заочної'
+        # add bh and master course correction 
+    elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_evening:
+        formOfStudy = 'Вечірня????-_- к такому меня жизнь не готовила'
+    
+    time_string = form.cleaned_data['page_studFinish']
+    grad_time = time.strptime(time_string, "%d.%m.%Y")
+    if grad_time.tm_mon == 6:
+        finish_time = f"червні, {grad_time.tm_year}"
+    elif grad_time.tm_mon == 2:
+        finish_time = f"лютому, {grad_time.tm_year}"
+    elif grad_time.tm_mon == 12:
+        finish_time = f"грудень, {grad_time.tm_year}"
+
+    if form.cleaned_data['page_specialty'][:3] == '191':
+        specialty = "191 \"Архітектура та містобудування\""
+    elif form.cleaned_data['page_specialty'][:3] == '192':
+        specialty = '192 \"Будівництво та цивільна інженерія\"'
+    elif form.cleaned_data['page_specialty'][:3] == '073':
+        specialty = '073 \"Менеджмент\"'
+
+    # if form.cleaned_data['page_gradYear'] == 
+
+    
+    nameEn_parced = form.cleaned_data['page_name'].split(' ')
+    nameEn = ''
+    for word in nameEn_parced:
+        if word != '-':
+            nameEn += word + ' '
+
+
+    if form.cleaned_data['country'] == 'mr':
+        country = 'Королівства Марокко'
+    elif form.cleaned_data['country'] == 'tr':
+        country = 'Турецької Республіки'
+
+    doc_context = {
+        'country': country,
+        'name': nameEn,
+        'grade': course,
+        'study_form': formOfStudy,
+        'faculty': faculty,
+        'gender_1': gender_1,
+        'gender_2': gender_2,
+        'specialty': specialty,
+        'education_degree': eduLevel,     
+        'grad_year': finish_time,
+        'rector_type': rc_type,
+        'rector_name': rc_name,
+    }
+
+    doc.render(doc_context)
+    doc.save(settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_name']}.docx")
+
+    return (settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_name']}.docx")
+
+    # Create your views here.
+

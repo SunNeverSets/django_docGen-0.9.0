@@ -5,8 +5,8 @@ from .models import Page
 class DocForm(forms.ModelForm):
     DOC_CHOICES = (
         ('en', 'English'),
-        ('fr', 'French'),
-        ('ru', 'Russian'),
+        # ('fr', 'French'),
+        # ('ru', 'Russian'),
         ('uk', 'Ukrainian'),
     )
     doc_type = forms.ChoiceField(choices=DOC_CHOICES)
