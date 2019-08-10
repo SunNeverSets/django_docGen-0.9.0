@@ -25,7 +25,7 @@ SECRET_KEY = '1z5ec$di^-vl_=4_3fxb*fzz9rb)jz&9mxeq_$i8rg9rstp_!2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['165.22.92.197']
+ALLOWED_HOSTS = ['165.22.92.197', '127.0.0.1']
 
 
 # Application definition
@@ -136,9 +136,8 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
-VENV_PATH = os.path.dirname(BASE_DIR)
-STATIC_ROOT = os.path.join(VENV_PATH, 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'main/static'), ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(VENV_PATH, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
