@@ -87,7 +87,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'djangosandbox',
+            'NAME': 'dj_proj',
             'USER': 'admin',
             'PASSWORD': 'c137',
             'HOST': 'localhost',
