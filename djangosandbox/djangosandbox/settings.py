@@ -89,7 +89,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'djangosandbox',
             'USER': 'admin',
-            'PASSWORD': 'password123',
+            'PASSWORD': 'c137',
             'HOST': 'localhost',
             'PORT': '',
         }
