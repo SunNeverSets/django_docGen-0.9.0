@@ -209,7 +209,7 @@ def create_docEnglish(form):
     # else:
     #     doc_path = os.path.join(settings.BASE_DIR, '/static', 'en_template.docx')
     print(settings.BASE_DIR)
-    doc_path = settings.BASE_DIR + '\static\en_template.docx'
+    doc_path = settings.BASE_DIR + '/static/en_template.docx'
 
     print('doc_path   ---- >' +  doc_path)
     doc = DocxTemplate(doc_path)
@@ -312,9 +312,9 @@ def create_docEnglish(form):
     }
 
     doc.render(doc_context)
-    doc.save(settings.BASE_DIR + f"\static\{form.cleaned_data['page_nameEn']}.docx")
+    doc.save(settings.BASE_DIR + f"/static/{form.cleaned_data['page_nameEn']}.docx")
 
-    return (f"\static\{form.cleaned_data['page_nameEn']}.docx")
+    return (f"/static/{form.cleaned_data['page_nameEn']}.docx")
 
 def create_docUkrainian(form):
     doc_path = settings.BASE_DIR + '/static/uk_template.docx'
@@ -328,7 +328,7 @@ def create_docUkrainian(form):
         rc_name = 'Хоменко А.А.'
 
     if form.cleaned_data['page_eduLevel'] == st.bh:
-        eduLevel = '\"Ьакалавр\"'
+        eduLevel = '\"Бакалавр\"'
         if form.cleaned_data['page_gradYear'] == '2020':
             course = 'четвертого'
         elif form.cleaned_data['page_gradYear'] == '2021':
@@ -421,9 +421,9 @@ def create_docUkrainian(form):
     }
 
     doc.render(doc_context)
-    doc.save(settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_nameEn']}.docx")
+    doc.save(settings.BASE_DIR + f"/main/static/{form.cleaned_data['page_nameEn']}.docx")
 
-    return (settings.BASE_DIR + f"\main\static\{form.cleaned_data['page_nameEn']}.docx")
+    return (settings.BASE_DIR + f"/main/static/{form.cleaned_data['page_nameEn']}.docx")
 
     # Create your views here.
 
