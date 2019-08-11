@@ -140,42 +140,45 @@ def upload(request):
 
 @login_required(login_url='main:login')
 def doc_gen(request, slug):
-    unique_post = get_object_or_404(Page, slug=slug)
-    form = DocForm(request.POST or None,
-                   instance=unique_post)
-    if form.is_valid():
-        form.save()
-        doc_type_list = [
-                'en_template.docx', 
-                'uk_template.docx', 
-                'fr_template.docx', 
-                'ru_template.docx'
-                ]
-        # Delete all prev unneeded files
-        file_list = glob.glob(settings.BASE_DIR + '/static/*.docx')
-        for file in file_list:
-            # print(os.path.basename(file)[:2])
-            if os.path.basename(file) not in doc_type_list:
-                os.remove(file)
-                
+    try:
+        unique_post = get_object_or_404(Page, slug=slug)
+        form = DocForm(request.POST or None,
+                    instance=unique_post)
+        if form.is_valid():
+            form.save()
+            doc_type_list = [
+                    'en_template.docx', 
+                    'uk_template.docx', 
+                    'fr_template.docx', 
+                    'ru_template.docx'
+                    ]
+            # Delete all prev unneeded files
+            file_list = glob.glob(settings.BASE_DIR + '/static/*.docx')
+            for file in file_list:
+                # print(os.path.basename(file)[:2])
+                if os.path.basename(file) not in doc_type_list:
+                    os.remove(file)
+                    
 
-        # Get basic domain name
-        dn = get_basic_DN(request)
-        # document creation
+            # Get basic domain name
+            dn = get_basic_DN(request)
+            # document creation
 
-        currentPage_link = create_doc(form)
-        
-        messages.info(request, "Document Created")
-        print(settings.STATIC_ROOT)
-        
-        return redirect(dn + currentPage_link)
-        #  redirect(dn + f"/static/{form.cleaned_data['page_nameEn']}.docx")
+            currentPage_link = create_doc(form)
+            
+            messages.info(request, "Document Created")
+            print(settings.STATIC_ROOT)
+            
+            return redirect(dn + currentPage_link)
+            #  redirect(dn + f"/static/{form.cleaned_data['page_nameEn']}.docx")
 
-        # os.remove(current_docPath)
+            # os.remove(current_docPath)
 
-    context = {
-        'form': form
-    }
+        context = {
+            'form': form
+        }
+    except Exception as e:
+        messages.error(request, f'Error: {e}')
 
     return render(request, 'main/detail.html', context)
 
