@@ -105,7 +105,7 @@ def login_request(request):
 def upload(request):
     if request.method == "POST":
         uploaded_file = request.FILES['document']
-        unpacked_file = uploaded_file.read().decode('ANSI')
+        unpacked_file = uploaded_file.read().decode('cp1251')
         io_string = io.StringIO(unpacked_file)
 
         uploaded_data = csv.reader(io_string, delimiter=';')
