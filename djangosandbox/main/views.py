@@ -421,9 +421,9 @@ def create_docUkrainian(form):
     }
 
     doc.render(doc_context)
-    doc.save(settings.BASE_DIR + f"/main/static/{form.cleaned_data['page_nameEn']}.docx")
+    doc.save(settings.BASE_DIR + f"/static/{form.cleaned_data['page_nameEn']}.docx")
 
-    return (settings.BASE_DIR + f"/main/static/{form.cleaned_data['page_nameEn']}.docx")
+    return (f"/static/{form.cleaned_data['page_nameEn']}.docx")
 
     # Create your views here.
 
