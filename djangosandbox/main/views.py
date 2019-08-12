@@ -30,29 +30,32 @@ st = Stud()
 
 @login_required(login_url='main:login')
 def homepage(request):
-    qs = Page.objects.all()
-    page_id_query = request.GET.get('unique_id')
-    facultiesList = qs.values_list('page_faculty', flat=True).distinct()
+    try:
+        qs = Page.objects.all()
+        page_id_query = request.GET.get('unique_id')
+        facultiesList = qs.values_list('page_faculty', flat=True).distinct()
 
-    page_name_query = request.GET.get('text-unique')
-    page_gradYear_query = request.GET.get('select-box1')
-    page_faculty_query = request.GET.get('select-box2')
-    page_eduLevel_query = request.GET.get('select-box3')
-    if is_valid_queryPar(page_name_query):
-        qs = qs.filter(page_name__icontains=page_name_query)
-    if is_valid_queryPar(page_gradYear_query):
-        qs = qs.filter(page_gradYear=page_gradYear_query)
-    if is_valid_queryPar(page_faculty_query):
-        qs = qs.filter(page_faculty=page_faculty_query)
-    if is_valid_queryPar(page_eduLevel_query):
-        if page_eduLevel_query == 'bh':
-            qs = qs.filter(page_eduLevel= st.bh)
-        elif page_eduLevel_query == 'ma':
-            qs = qs.filter(page_eduLevel= st.ma)
-    context = {
-        'students': qs,
-        'faculties': facultiesList
-    }
+        page_name_query = request.GET.get('text-unique')
+        page_gradYear_query = request.GET.get('select-box1')
+        page_faculty_query = request.GET.get('select-box2')
+        page_eduLevel_query = request.GET.get('select-box3')
+        if is_valid_queryPar(page_name_query):
+            qs = qs.filter(page_name__icontains=page_name_query)
+        if is_valid_queryPar(page_gradYear_query):
+            qs = qs.filter(page_gradYear=page_gradYear_query)
+        if is_valid_queryPar(page_faculty_query):
+            qs = qs.filter(page_faculty=page_faculty_query)
+        if is_valid_queryPar(page_eduLevel_query):
+            if page_eduLevel_query == 'bh':
+                qs = qs.filter(page_eduLevel= st.bh)
+            elif page_eduLevel_query == 'ma':
+                qs = qs.filter(page_eduLevel= st.ma)
+        context = {
+            'students': qs,
+            'faculties': facultiesList
+        }
+    except Exception as e:
+        messages.error(request, f'Error: {e}')
 
     return render(request, 'main/home.html', context)
 
@@ -103,38 +106,42 @@ def login_request(request):
 
 @login_required(login_url='main:login')
 def upload(request):
-    if request.method == "POST":
-        uploaded_file = request.FILES['document']
-        unpacked_file = uploaded_file.read().decode('cp1251')
-        io_string = io.StringIO(unpacked_file)
+    try:
+        if request.method == "POST":
+            uploaded_file = request.FILES['document']
+            unpacked_file = uploaded_file.read().decode('cp1251')
+            io_string = io.StringIO(unpacked_file)
 
-        uploaded_data = csv.reader(io_string, delimiter=';')
+            uploaded_data = csv.reader(io_string, delimiter=';')
 
-        i = 0
-        for row in uploaded_data:
-            if row[st.nationality] == st.is_foreign:
-                _, created = Page.objects.update_or_create(
-                    page_id=row[st.id],
-                    page_name=row[st.name],
-                    page_birth=row[st.birth],
-                    page_gender=row[st.gender],
-                    page_nationality=row[st.nationality],
-                    page_nameEn=row[st.en_stud_name],
-                    page_gradYear=row[st.stud_end_year],
-                    page_studFinish=row[st.finish_study],
-                    page_faculty=row[st.faculty],
-                    page_eduLevel=row[st.edu_level],
-                    page_formOfStudy=row[st.form_of_study],
-                    page_specialty=row[st.stud_spec],
-                    page_eduProg=row[st.edu_prog],
-                    page_prevDoc=row[st.stud_prev_document],
-                    slug=row[st.id],
-                )
-        # if uploaded_file.file.name.endswith('.csv'):
-            # outData = csv.reader(uploaded_file, delimiter=';', quotechar='"')
-            # print(outData[1])
-        print(uploaded_file)
-        print(uploaded_file.size)
+            i = 0
+            for row in uploaded_data:
+                if row[st.nationality] == st.is_foreign:
+                    _, created = Page.objects.update_or_create(
+                        page_id=row[st.id],
+                        page_name=row[st.name],
+                        page_birth=row[st.birth],
+                        page_gender=row[st.gender],
+                        page_nationality=row[st.nationality],
+                        page_nameEn=row[st.en_stud_name],
+                        page_gradYear=row[st.stud_end_year],
+                        page_studFinish=row[st.finish_study],
+                        page_faculty=row[st.faculty],
+                        page_eduLevel=row[st.edu_level],
+                        page_formOfStudy=row[st.form_of_study],
+                        page_specialty=row[st.stud_spec],
+                        page_eduProg=row[st.edu_prog],
+                        page_prevDoc=row[st.stud_prev_document],
+                        slug=row[st.id],
+                    )
+            # if uploaded_file.file.name.endswith('.csv'):
+                # outData = csv.reader(uploaded_file, delimiter=';', quotechar='"')
+                # print(outData[1])
+            print(uploaded_file)
+            print(uploaded_file.size)
+    except Exception as e:
+        messages.error(request, f'Error: {e}')
+
     return render(request, "main/upload.html")
 
 
