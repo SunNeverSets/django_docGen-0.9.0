@@ -23,11 +23,6 @@ st = Stud()
 
 
 
-
-# def generate_docx(request):
-#     qs = Page.objects.all
-
-
 @login_required(login_url='main:login')
 def homepage(request):
     try:
@@ -207,13 +202,13 @@ def get_basic_DN(request):
 
 def create_doc(form):
     if form.cleaned_data['doc_type'] == 'en':
-        return create_docEnglish(form)
+        return create_docEnglish(form, 'en')
     elif form.cleaned_data['doc_type'] == 'uk':
-        return create_docUkrainian(form)
+        return create_docUkrainian(form, 'uk')
     # if document is English
 
 
-def create_docEnglish(form):
+def create_docEnglish(form, language):
     # if setting.DEBUG:
     #     doc_path =  os.path.join(settings.BASE_DIR, '/main/static', 'en_template.docx')
     # else:
@@ -267,6 +262,9 @@ def create_docEnglish(form):
         faculty = 'Engineering systems and ecology'
     elif form.cleaned_data['page_faculty'] == st.fac_urban:
         faculty = 'Urbanistins and environmental planning'
+
+    faculty_1 = faculty_langFilter(form.cleaned_data['page_faculty'], language)
+    print(faculty_1)
 
     if form.cleaned_data['page_formOfStudy'] == st.formOfSt_full:
         formOfStudy = 'full-time'
@@ -326,7 +324,7 @@ def create_docEnglish(form):
 
     return (f"/static/{form.cleaned_data['page_nameEn']}.docx")
 
-def create_docUkrainian(form):
+def create_docUkrainian(form, language):
     doc_path = settings.BASE_DIR + '/static/uk_template.docx'
     doc = DocxTemplate(doc_path)
 
@@ -437,3 +435,5 @@ def create_docUkrainian(form):
 
     # Create your views here.
 
+def faculty_langFilter(prop, language):
+    return st.faculty_transDic[prop][language]
