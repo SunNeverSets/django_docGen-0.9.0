@@ -320,9 +320,9 @@ def create_docEnglish(form, language):
     }
 
     doc.render(doc_context)
-    doc.save(settings.BASE_DIR + f"/static/{form.cleaned_data['page_nameEn']}.docx")
+    doc.save(settings.BASE_DIR + f"/media/{form.cleaned_data['page_nameEn']}.docx")
 
-    return (f"/static/{form.cleaned_data['page_nameEn']}.docx")
+    return (f"/media/{form.cleaned_data['page_nameEn']}.docx")
 
 def create_docUkrainian(form, language):
     doc_path = settings.BASE_DIR + '/static/uk_template.docx'
@@ -429,9 +429,9 @@ def create_docUkrainian(form, language):
     }
 
     doc.render(doc_context)
-    doc.save(settings.BASE_DIR + f"/static/{form.cleaned_data['page_nameEn']}.docx")
+    doc.save(settings.BASE_DIR + f"/media/{form.cleaned_data['page_nameEn']}.docx")
 
-    return (f"/static/{form.cleaned_data['page_nameEn']}.docx")
+    return (f"/media/{form.cleaned_data['page_nameEn']}.docx")
 
     # Create your views here.
 
