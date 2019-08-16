@@ -1,6 +1,6 @@
 class Stud():
     """
-    Stud propeties
+    Stud propties
     """
     
     def __init__(self):
@@ -44,14 +44,109 @@ class Stud():
         self.fac_ingSyst = 'Інженерних систем та екології'
         self.fac_urban = 'Урбаністики та просторового планування'
 
+        self.rectorType_transDic = {
+            'dn': {
+                'en': 'First vice-rector',
+                'uk': 'Перший проректор',
+                'ru': '',
+                'fr': '',
+            },
+            'kh': {
+                'en': 'Vice-rector',
+                'uk': 'Проректор',
+                'ru': '',
+                'fr': '',
+            }
+        }
+        self.rectorName_transDic = {
+            'dn': {
+                'en': 'D.Chernyshev',
+                'uk': 'Чернишов Д.О.',
+                'ru': '',
+                'fr': '',
+            },
+            'kh': {
+                'en': 'D.Chernyshev',
+                'uk': 'Хоменко А.А.',
+                'ru': '',
+                'fr': '',
+            }
+        }
         self.specialty_transDic = {
-            '191':{
+            '191 Архітектура та містобудування':{
+                'en': "191 \"Architecture and Urban Development\"",    
+                'uk': "191 \"Архітектура та містобудування\"",
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            '192 Будівництво та цивільна інженерія':{
+                'en': '192 \"Construction and Civil Engineering\"',    
+                'uk': '192 \"Будівництво та цивільна інженерія\"',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            '023 Образотворче мистецтво, декоративне мистецтво, реставрація':{
+                'en': 'English',    
+                'uk': 'Ukrainian',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            '141 Електроенергетика, електротехніка та електромеханіка':{
+                'en': 'English',    
+                'uk': 'Ukrainian',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            '073 Менеджмент':{
+                'en': '073 \"Management\"',    
+                'uk': '073 \"Менеджмент\"',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            '193 Геодезія та землеустрій':{
+                'en': 'English',    
+                'uk': 'Ukrainian',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            "122 Комп'ютерні науки":{
+                'en': 'English',    
+                'uk': 'Ukrainian',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            '051 Економіка':{
+                'en': 'English',    
+                'uk': 'Ukrainian',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            "151 Автоматизація та комп’ютерно-інтегровані технології":{
+                'en': 'English',    
+                'uk': 'Ukrainian',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            '133 Галузеве машинобудування':{
+                'en': 'English',    
+                'uk': 'Ukrainian',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            "122 Комп’ютерні науки та інформаційні технології":{
+                'en': 'English',    
+                'uk': 'Ukrainian',
+                'ru': 'Russian',
+                'fr': 'French',
+            },
+            '022 Дизайн':{
                 'en': 'English',    
                 'uk': 'Ukrainian',
                 'ru': 'Russian',
                 'fr': 'French',
             },
         }
+
         self.faculty_transDic = {
             'Архітектурний':{
                 'en': 'architecture',
@@ -97,9 +192,71 @@ class Stud():
             }
         }
 
+        self.studForm_transDic = {
+            'Денна': {
+                'en': 'full-time',
+                'uk': 'денної',
+                'ru': 'дневной',
+                'fr': '',
+            },
+            'Заочна': {
+                'en': 'part-time',
+                'uk': 'заочної',
+                'ru': 'заочной',
+                'fr': '',
+            },
+            'Вечірня': {
+                'en': '---',
+                'uk': '---',
+                'ru': '---',
+                'fr': '---',
+            },
+        }
+
+        self.countries_transDic = {
+            'mr':{
+                'en': 'Morocco',
+                'uk': 'Королівств Марокко',
+                'ru': 'Королевство Марокко',
+                'fr': '',
+            },
+            'tr':{
+                'en': 'Turkey',
+                'uk': 'Турецька Республіка',
+                'ru': 'Турецкая Республика',
+                'fr': '',
+            },
+        }
+        self.eduLevel_transDic = {
+            self.bh: {
+                'en': 'Bachelor',
+                'uk': '\"Магіст\"',
+                'ru': '\"Магистр\"',
+                'fr': '',
+            },
+            self.ma: {
+                'en': 'Master',
+                'uk': '\"Магіст\"',
+                'ru': '\"Бакалавр\"',
+                'fr': '',
+            }
+        }
         self.formOfSt_full = 'Денна'
         self.formOfSt_part = 'Заочна'
         self.formOfSt_evening = 'Вечірня'
+    def get_gradDate(self, form, level, yaer):
+        if form == self.formOfSt_full:
+            if level == self.bh:
+                pass
+            elif level == self.ma:
+                pass
+        else:
+            if level == self.bh:
+                pass
+            elif level == self.ma:
+                pass
+
+        pass
     def get_heading(self, locList):
         """
         Gets the heading with all the parameters

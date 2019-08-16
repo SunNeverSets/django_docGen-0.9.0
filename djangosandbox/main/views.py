@@ -30,6 +30,8 @@ def homepage(request):
         page_id_query = request.GET.get('unique_id')
         facultiesList = qs.values_list('page_faculty', flat=True).distinct()
 
+        specList = qs.values_list('page_specialty', flat=True).distinct()
+
         page_name_query = request.GET.get('text-unique')
         page_gradYear_query = request.GET.get('select-box1')
         page_faculty_query = request.GET.get('select-box2')
@@ -45,6 +47,7 @@ def homepage(request):
                 qs = qs.filter(page_eduLevel= st.bh)
             elif page_eduLevel_query == 'ma':
                 qs = qs.filter(page_eduLevel= st.ma)
+        print(specList)
         context = {
             'students': qs,
             'faculties': facultiesList
@@ -209,23 +212,13 @@ def create_doc(form):
 
 
 def create_docEnglish(form, language):
-    # if setting.DEBUG:
-    #     doc_path =  os.path.join(settings.BASE_DIR, '/main/static', 'en_template.docx')
-    # else:
-    #     doc_path = os.path.join(settings.BASE_DIR, '/static', 'en_template.docx')
-    print(settings.BASE_DIR)
     doc_path = settings.BASE_DIR + '/static/en_template.docx'
-
-    print('doc_path   ---- >' +  doc_path)
     doc = DocxTemplate(doc_path)
 
-    if form.cleaned_data['rector'] == 'dn':
-        rc_type = 'First vice-rectot'
-        rc_name = 'D.Chernyshev'
-    elif form.cleaned_data['rector'] == 'kh':
-        rc_type = 'Vice-rector'
-        rc_name = 'O.Khomenko'
 
+    rc_type = st.rectorType_transDic[form.cleaned_data['rector']][language]
+    rc_name = st.rectorName_transDic[form.cleaned_data['rector']][language]
+    
     if form.cleaned_data['page_eduLevel'] == st.bh:
         eduLevel = 'Bachelor'
         if form.cleaned_data['page_gradYear'] == '2020':
@@ -248,32 +241,11 @@ def create_docEnglish(form, language):
     elif form.cleaned_data['page_gender'] == st.male:
         gender_1 = 'His'
     
-    if form.cleaned_data['page_faculty'] == st.fac_arch:
-        faculty = 'architecture'
-    elif form.cleaned_data['page_faculty'] == st.fac_const:
-        faculty = 'construction'
-    elif form.cleaned_data['page_faculty'] == st.fac_auto:
-        faculty = 'automation and information technologies'
-    elif form.cleaned_data['page_faculty'] == st.fac_geo:
-        faculty = 'geoinforamtion systems and territorial management'
-    elif form.cleaned_data['page_faculty'] == st.fac_budTech:
-        faculty = 'tecnologico-construction'
-    elif form.cleaned_data['page_faculty'] == st.fac_ingSyst:
-        faculty = 'Engineering systems and ecology'
-    elif form.cleaned_data['page_faculty'] == st.fac_urban:
-        faculty = 'Urbanistins and environmental planning'
+ 
+    faculty = st.faculty_transDic[form.cleaned_data['page_faculty']][language]
 
-    faculty_1 = faculty_langFilter(form.cleaned_data['page_faculty'], language)
-    print(faculty_1)
+    formOfStudy = st.studForm_transDic[form.cleaned_data['page_formOfStudy'][language]]
 
-    if form.cleaned_data['page_formOfStudy'] == st.formOfSt_full:
-        formOfStudy = 'full-time'
-    elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_part:
-        formOfStudy = 'part-time'
-        # add bh and master course correction 
-    elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_evening:
-        formOfStudy = 'Вечірня????-_- к такому меня жизнь не готовила'
-    
     time_string = form.cleaned_data['page_studFinish']
     grad_time = time.strptime(time_string, "%d.%m.%Y")
     if grad_time.tm_mon == 6:
@@ -283,27 +255,18 @@ def create_docEnglish(form, language):
     elif grad_time.tm_mon == 12:
         finish_time = f"Dec, {grad_time.tm_year}"
 
-    if form.cleaned_data['page_specialty'][:3] == '191':
-        specialty = "191 \"Architecture and Urban Development\""
-    elif form.cleaned_data['page_specialty'][:3] == '192':
-        specialty = '192 \"Construction and Civil Engineering\"'
-    elif form.cleaned_data['page_specialty'][:3] == '073':
-        specialty = '073 \"Management\"'
 
-    # if form.cleaned_data['page_gradYear'] == 
+    faculty = st.faculty_transDic[form.cleaned_data['page_faculty']][language]
 
-    
+    specialty = st.specialty_transDic[form.cleaned_data['page_specialty'][language]]
+
     nameEn_parced = form.cleaned_data['page_nameEn'].split(' ')
     nameEn = ''
     for word in nameEn_parced:
         if word != '-':
             nameEn += word + ' '
-
-
-    if form.cleaned_data['country'] == 'mr':
-        country = 'Morocco'
-    elif form.cleaned_data['country'] == 'tr':
-        country = 'Turkey'
+    
+    country = st.countries_transDic[form.cleaned_data['country'][language]]
 
     doc_context = {
         'country': country,
@@ -328,12 +291,9 @@ def create_docUkrainian(form, language):
     doc_path = settings.BASE_DIR + '/static/uk_template.docx'
     doc = DocxTemplate(doc_path)
 
-    if form.cleaned_data['rector'] == 'dn':
-        rc_type = 'Перший  проректор'
-        rc_name = 'Чернишов Д.О.'
-    elif form.cleaned_data['rector'] == 'kh':
-        rc_type = 'Проректор'
-        rc_name = 'Хоменко А.А.'
+
+    rc_type = st.rectorType_transDic[form.cleaned_data['rector']][language]
+    rc_name = st.rectorName_transDic[form.cleaned_data['rector']][language]
 
     if form.cleaned_data['page_eduLevel'] == st.bh:
         eduLevel = '\"Бакалавр\"'
@@ -351,6 +311,8 @@ def create_docUkrainian(form, language):
             course = 'першого' 
         elif form.cleaned_data['page_gradYear'] == '2021':
             course = 'другого' 
+     
+    eduLevel = st.eduLevel_transDic[form.cleaned_data['page_eduLevel'][language]]
 
     if form.cleaned_data['page_gender'] == st.female:
         gender_1 = 'грамадянинці'
@@ -359,29 +321,12 @@ def create_docUkrainian(form, language):
         gender_1 = 'громадянину'
         gender_2 = 'він'
     
-    if form.cleaned_data['page_faculty'] == st.fac_arch:
-        faculty = 'архітектурного'
-    elif form.cleaned_data['page_faculty'] == st.fac_const:
-        faculty = 'будівельного'
-    elif form.cleaned_data['page_faculty'] == st.fac_auto:
-        faculty = 'автоматизації та інформаційних технологій'
-    elif form.cleaned_data['page_faculty'] == st.fac_geo:
-        faculty = 'Геоінформаційних систем і управління територіями'
-    elif form.cleaned_data['page_faculty'] == st.fac_budTech:
-        faculty = 'Будівельно-технологічний'
-    elif form.cleaned_data['page_faculty'] == st.fac_ingSyst:
-        faculty = 'Інженерних систем та екології'
-    elif form.cleaned_data['page_faculty'] == st.fac_urban:
-        faculty = 'Урбаністики та просторового планування'
 
-    if form.cleaned_data['page_formOfStudy'] == st.formOfSt_full:
-        formOfStudy = 'денної'
-    elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_part:
-        formOfStudy = 'заочної'
-        # add bh and master course correction 
-    elif form.cleaned_data['page_formOfStudy'] == st.formOfSt_evening:
-        formOfStudy = 'Вечірня????-_- к такому меня жизнь не готовила'
+    faculty = st.faculty_transDic[form.cleaned_data['page_faculty']][language]
+
     
+    formOfStudy = st.studForm_transDic[form.cleaned_data['page_formOfStudy'][language]]
+
     time_string = form.cleaned_data['page_studFinish']
     grad_time = time.strptime(time_string, "%d.%m.%Y")
     if grad_time.tm_mon == 6:
@@ -391,15 +336,8 @@ def create_docUkrainian(form, language):
     elif grad_time.tm_mon == 12:
         finish_time = f"грудень, {grad_time.tm_year}"
 
-    if form.cleaned_data['page_specialty'][:3] == '191':
-        specialty = "191 \"Архітектура та містобудування\""
-    elif form.cleaned_data['page_specialty'][:3] == '192':
-        specialty = '192 \"Будівництво та цивільна інженерія\"'
-    elif form.cleaned_data['page_specialty'][:3] == '073':
-        specialty = '073 \"Менеджмент\"'
 
-    # if form.cleaned_data['page_gradYear'] == 
-
+    specialty = st.specialty_transDic[form.cleaned_data['page_specialty'][language]]
     
     nameEn_parced = form.cleaned_data['page_nameEn'].split(' ')
     nameEn = ''
@@ -408,10 +346,7 @@ def create_docUkrainian(form, language):
             nameEn += word + ' '
 
 
-    if form.cleaned_data['country'] == 'mr':
-        country = 'Morocco'
-    elif form.cleaned_data['country'] == 'tr':
-        country = 'Turkey'
+    country = st.countries_transDic[form.cleaned_data['country'][language]]
 
     doc_context = {
         'country': country,
@@ -435,5 +370,4 @@ def create_docUkrainian(form, language):
 
     # Create your views here.
 
-def faculty_langFilter(prop, language):
-    return st.faculty_transDic[prop][language]
+    
