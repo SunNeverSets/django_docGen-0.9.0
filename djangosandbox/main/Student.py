@@ -241,22 +241,96 @@ class Stud():
                 'fr': '',
             }
         }
+        
+        self.courseFullBh_transDic = {
+            '2020':{
+                'en': 'fourth',
+                'uk': 'четвертого',
+                'ru': '',
+                'fr': '',
+            },
+            '2021':{
+                'en': 'third',
+                'uk': 'третього',
+                'ru': '',
+                'fr': '',
+            },
+            '2022':{
+                'en': 'second',
+                'uk': 'другого',
+                'ru': '',
+                'fr': '',
+            },
+            '2023':{
+                'en': 'first',
+                'uk': 'першого',
+                'ru': '',
+                'fr': '',
+            }
+        }
+        self.coursePartBh_transDic = {
+            '2020':{
+                'en': 'fifth',
+                'uk': "п'ятого",
+                'ru': '',
+                'fr': '',
+            },
+            '2021':{
+                'en': 'fourth',
+                'uk': 'четвертого',
+                'ru': '',
+                'fr': '',
+            },
+            '2022':{
+                'en': 'third',
+                'uk': 'третього',
+                'ru': '',
+                'fr': '',
+            },
+            '2023':{
+                'en': 'second',
+                'uk': 'другого',
+                'ru': '',
+                'fr': '',
+            },
+            '2024':{
+                'en': 'first',
+                'uk': 'першого',
+                'ru': '',
+                'fr': '',
+            }
+        }
+        self.courseMa_transDic = {
+            '2020':{
+                'en': 'second',
+                'uk': "другого",
+                'ru': '',
+                'fr': '',
+            },
+            '2021':{
+                'en': 'first',
+                'uk': 'першого',
+                'ru': '',
+                'fr': '',
+            },
+        }
+
         self.formOfSt_full = 'Денна'
         self.formOfSt_part = 'Заочна'
         self.formOfSt_evening = 'Вечірня'
-    def get_gradDate(self, form, level, yaer):
-        if form == self.formOfSt_full:
-            if level == self.bh:
-                pass
-            elif level == self.ma:
-                pass
-        else:
-            if level == self.bh:
-                pass
-            elif level == self.ma:
-                pass
 
-        pass
+    def get_gradYear(self, form, level, year, language):
+        """Returns a valid current year 
+        args: form, level, year, language
+        """
+        if level == self.bh:
+            if form == self.formOfSt_part:
+                return self.coursePartBh_transDic[year][language]
+            elif form == self.formOfSt_full:
+                return self.courseFullBh_transDic[year][language]
+        else:
+            return self.courseMa_transDic[year][language]
+
     def get_heading(self, locList):
         """
         Gets the heading with all the parameters
